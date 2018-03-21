@@ -1,0 +1,13 @@
+[] users should be able to create a profile
+   avatar
+   bio
+   pick their skills from a list
+[] Users should be able to post a project
+   title
+   description
+[] users should be able to post a job
+   description of what the position is for
+[] Users should be able to find projects and ask to join it
+[] As a project owner you can allow a deny a person from joining the project
+[] login and logout links too
+

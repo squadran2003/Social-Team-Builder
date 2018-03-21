@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+{% block content %}
+
+  <div class="bounds circle--page">
+    <div class="circle--page--header circle--fluid">
+      <div class="circle--fluid--cell circle--fluid--primary">
+        <h2>Profile</h2>
+      </div>
+      <div class="circle--fluid--cell circle--fluid--secondary">
+        <a class="button button-primary icon-on-left" onclick="document.getElementById('edit-form').submit();">Save Changes</a>
+      </div>
+    </div>
+
+    <div class="grid-70">
+      <form id="edit-form" method="POST" enctype="multipart/form-data" action="{% url 'accounts:edit_profile' %}">
+        {% csrf_token %}
+         {{ form.full_name}}
+         {{ form.bio|escape}}
+   
+      </form>
+
+
+      <h2>Past Projects</h2>
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Project Title</th>
+            <th class="circle--cell--right">Project Needs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="clickable-row" data-href="project.html">
+            <td>
+              <h3>Invoice Delivery Tool</h3>
+            </td>
+            <td class="circle--cell--right">
+              <span class="secondary-label">Rails Developer</span>
+            </td>
+          </tr>
+          <tr class="clickable-row" data-href="project.html">
+            <td>
+              <h3>Twitter Client</h3>
+            </td>
+            <td class="circle--cell--right">
+              <span class="secondary-label">Designer</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+
+      <div class="circle--secondary--module">
+        {% if form.instance.image %}
+          <img class="avatar" src="{{ form.instance.image.url }}">
+        {% else %}
+          <div class="circle--primary--avatar">
+            <form methd="post" id="edit-form" enctype="multipart/form-data" action="{% url 'accounts:edit_profile' %}">              
+                <input type="file" name="image" id="id_image">
+            </form>
+          </div>
+    
+        {% endif %}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>My Skills</h4>
+        <ul class="circle--clone--list">
+          <li>
+            <input type="text" placeholder="Skill" />
+            <a class="circle--clone--add">Add Skill</a>
+            <a class="circle--clone--remove">Remove</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>My Projects</h4>
+        <ul class="circle--clone--list">
+          <li>
+            <input type="text" placeholder="Project Name" />
+            <input type="text" placeholder="Project URL" />
+            <a class="circle--clone--add">Add Project</a>
+            <a class="circle--clone--remove">Remove</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  {% endblock %}

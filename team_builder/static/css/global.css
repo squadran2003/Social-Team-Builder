@@ -2054,6 +2054,7 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
   position: relative;
   position: relative;
 }
+
 /* line 73, ../sass/circle/core/mixins.sass */
 .circle--primary--avatar:before {
   display: block;
@@ -2080,6 +2081,10 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+.avatar{
+  max-width: 100%;
+  max-height: 100%;
+}
 /* line 87, ../sass/circle/components/containers.sass */
 .circle--section > p {
   font-size: 1.8rem;
@@ -2105,3 +2110,4 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
 .logo:hover {
   box-shadow: 0 0 0 15px #fff inset;
 }
+
