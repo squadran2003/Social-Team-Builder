@@ -8,12 +8,15 @@
         <h2>Profile</h2>
       </div>
       <div class="circle--fluid--cell circle--fluid--secondary">
-        <a class="button button-primary icon-on-left" onclick="document.getElementById('edit-form').submit();">Save Changes</a>
+        <a class="button button-primary icon-on-left" 
+           onclick="document.getElementById('form1').submit();
+                    document.getElementById('form2').submit();">Save Changes
+      </a>
       </div>
     </div>
 
     <div class="grid-70">
-      <form id="edit-form" method="POST" enctype="multipart/form-data" action="{% url 'accounts:edit_profile' %}">
+      <form method="POST" id="form1" enctype="multipart/form-data" action="{% url 'accounts:edit_profile' %}">
         {% csrf_token %}
          {{ form.full_name}}
          {{ form.bio|escape}}
@@ -53,12 +56,14 @@
     <div class="grid-25 grid-push-5">
 
       <div class="circle--secondary--module">
-        {% if form.instance.image %}
-          <img class="avatar" src="{{ form.instance.image.url }}">
+        {% if user.profile_image.image %}
+          <img class="avatar" src="{{ user.profile_image.image.url}}">
         {% else %}
           <div class="circle--primary--avatar">
-            <form methd="post" id="edit-form" enctype="multipart/form-data" action="{% url 'accounts:edit_profile' %}">              
-                <input type="file" name="image" id="id_image">
+            <form method="POST" id="form2" enctype="multipart/form-data" action="{% url 'accounts:upload_profile_image' %}">               
+              {% csrf_token %}
+              {{ ProfileImageForm.as_p}}
+    
             </form>
           </div>
     

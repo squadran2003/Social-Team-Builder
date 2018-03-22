@@ -10,21 +10,36 @@ from django.shortcuts import render
 from PIL import Image
 from django.conf import settings
 from . import forms
-from .models import User
+from .models import User, ProfileImage
 import os
 
+
+class UploadProfileImage(CreateView):
+    template_name = 'accounts/edit_profile.html'
+    form_class = forms.ProfileImageForm
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        return super().form_valid(form)
 
 
 
 class ProfileView(UpdateView):
     model = User
     success_url = reverse_lazy('home')
-    fields = ['full_name','bio','image']
+    form_class = forms.UserCreateForm
 
 
     def get_object(self):
         return User.objects.get(pk=self.request.user.id)
-    
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['ProfileImageForm'] = forms.ProfileImageForm
+        return context
 
     def get_template_names(self):
         """this method checks the option,
@@ -42,6 +57,7 @@ class ProfileView(UpdateView):
         form.fields['full_name'].label=''
         form.fields['bio'].label=''
         return form 
+        
 
 
 
