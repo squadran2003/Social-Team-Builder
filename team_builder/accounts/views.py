@@ -10,37 +10,20 @@ from django.shortcuts import render
 from PIL import Image
 from django.conf import settings
 from . import forms
-from .models import User, ProfileImage
+from projects.forms import ProjectFormSet
+from .models import User
 import os
-
-
-class UploadProfileImage(CreateView):
-    template_name = 'accounts/edit_profile.html'
-    form_class = forms.ProfileImageForm
-    success_url = reverse_lazy('home')
-
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.user = self.request.user
-        instance.save()
-        return super().form_valid(form)
-
 
 
 class ProfileView(UpdateView):
     model = User
     success_url = reverse_lazy('home')
     form_class = forms.UserCreateForm
-
+ 
 
     def get_object(self):
         return User.objects.get(pk=self.request.user.id)
-
-    def get_context_data(self, **kwargs):
-        context = super(ProfileView, self).get_context_data(**kwargs)
-        context['ProfileImageForm'] = forms.ProfileImageForm
-        return context
-
+ 
     def get_template_names(self):
         """this method checks the option,
         if its not view it shows the edit template"""
@@ -50,13 +33,33 @@ class ProfileView(UpdateView):
         else:
              return 'accounts/edit_profile.html'
     
+    def get_context_data(self, **kwargs):
+        data = super(ProfileView,self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['projects']= ProjectFormSet(self.request.POST,
+                                            instance=self.get_object())
+        else:
+            data['projects']=ProjectFormSet(instance=self.get_object())
+        return data
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        projects = context['projects']
+        if projects.is_valid():
+            projects.instance = self.get_object()
+            projects.save()
+        return super(ProfileView,self).form_valid(form)
+    
     def get_form(self, *args, **kwargs):
         form = super(ProfileView, self).get_form(*args, **kwargs)
         form.fields['full_name'].widget.attrs['class']='circle--input--h1'
         form.fields['full_name'].widget.attrs['placeholder']='Firstname'
         form.fields['full_name'].label=''
+        form.fields['bio'].widget.attrs['placeholder']='Tell us about yourself...'
         form.fields['bio'].label=''
         return form 
+    
+
         
 
 
@@ -75,7 +78,7 @@ class SignupView(CreateView):
     model = User
     fields = ['display_name','email','password']
     template_name = 'accounts/signup.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('accounts:login')
 
     def form_valid(self, form):
         user = form.save(commit=False)
