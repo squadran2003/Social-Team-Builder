@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
@@ -12,10 +12,10 @@ from django.conf import settings
 from . import forms
 from projects.forms import ProjectFormSet
 from .models import User
-import os
 
 
-class ProfileView(UpdateView):
+
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     success_url = reverse_lazy('home')
     form_class = forms.UserCreateForm

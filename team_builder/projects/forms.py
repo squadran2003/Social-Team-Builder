@@ -15,7 +15,7 @@ class ProjectForm(ModelForm):
 
 ProjectFormSet = inlineformset_factory(User, 
                                         Project,form=ProjectForm,
-                                        extra=0)
+                                        max_num=0)
         
 
 
