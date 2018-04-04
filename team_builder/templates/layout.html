@@ -25,9 +25,6 @@
 
   <!-- JS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script type="text/javascript" src="{% static 'js/autogrow.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
 
 
 </head>
@@ -73,9 +70,21 @@
       </ul>
     </nav>
   </div>
+
+
   {% block content %}
   {% endblock %}
-  {% block js%}
-  {% endblock %}
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/autogrow.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+  <script type="text/javascript">
+    $(function() {
+        $('#projects').formset({
+            prefix: '{{ formset.prefix }}'
+        });
+    })
+  </script>
 </body>
 </html>

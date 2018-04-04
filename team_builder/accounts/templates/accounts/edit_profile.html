@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
 {% block content %}
-  <form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+  <form id="profile-form" class='dynamic-form' action="" enctype="multipart/form-data" method="post">{% csrf_token %}
       <div class="bounds circle--page">
         <div class="circle--page--header circle--fluid">
           <div class="circle--fluid--cell circle--fluid--primary">
@@ -78,44 +78,21 @@
           <div class="circle--secondary--module">
             <h4>My Projects</h4>
             <ul class="circle--clone--list">
-              {{ projects.management_form }}
-              <li>
-                {% if projects|length == 0%}
-                  <input type="text" name='projects-0-title' id='id_projects-0-title' placeholder="Project Name" />
-                  <input type="text" name='projects-0-url' id='id_projects-0-url' placeholder="Project URL" />
-                  <a class="circle--clone--add">Add Project</a>
-                  <a class="circle--clone--remove">Remove</a>
-                {% else %}
-                  {% for form in projects %}
-                      {{form.id}}
-                      {{form.title}}
-                      {{form.url}}
-                      {% if form.instance.id %}
-                      {{form.DELETE}} Delete Project</br>
-                      {%  endif %}
-                   {% endfor %}
-                   <a class="circle--clone--add">Add Project</a>
-                   <a class="circle--clone--remove">Remove</a>
-                {% endif %}
-               </li>
-           </ul>
+                {% for form in projects %}
+                <li id='projects'>
+                  {{ form.title }}
+                  {{ form.url }}
+                  {% if form.instance.pk %}{{form.DELETE}} {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {{ projects.management_form }}
           </div>
         </div>
 
       </div>
+
 </form>
 
-{% endblock %}
-{% block js%}
-<script>
-  $("#id_image").hide();
-
-
-    $("#upload_link").on('click', function(e){
-    e.preventDefault();
-    $("#id_image").trigger('click');
-  });
-
-</script>
 {% endblock %}
 
