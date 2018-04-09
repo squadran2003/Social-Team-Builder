@@ -10,7 +10,6 @@ from django.shortcuts import render
 from PIL import Image
 from django.conf import settings
 from . import forms
-from projects.forms import ProjectFormSet
 from .models import User
 
 
@@ -33,22 +32,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         else:
              return 'accounts/edit_profile.html'
     
-    def get_context_data(self, **kwargs):
-        data = super(ProfileView,self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['projects']= ProjectFormSet(self.request.POST,
-                                            instance=self.get_object())
-        else:
-            data['projects']=ProjectFormSet(instance=self.get_object())
-        return data
-    
-    def form_valid(self, form):
-        context = self.get_context_data()
-        projects = context['projects']
-        if projects.is_valid():
-            projects.instance = self.get_object()
-            projects.save()
-        return super(ProfileView,self).form_valid(form)
     
     def get_form(self, *args, **kwargs):
         form = super(ProfileView, self).get_form(*args, **kwargs)

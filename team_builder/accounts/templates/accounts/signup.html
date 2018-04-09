@@ -1,11 +1,15 @@
 {% extends 'layout.html' %}
 {%  block content %}
-<div class="grid-100">
-    <h2> Signup </h2>
-    <form method="POST" action='' enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form.as_p }}
-        <input type="submit" class="button-primary" value="Signup">
-    </form>
+<div class="bounds">
+    <div class="grid-30 centered">
+        <h2> Signup </h2>
+        <form method="POST" action='' enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+          <input type="submit" class="button-primary" value="Signup">
+          <a class='button' href='{% url 'accounts:login' %}'>Sign In</a>
+      </form>
+
+    </div>
 </div>
 {% endblock %}

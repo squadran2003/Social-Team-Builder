@@ -6,7 +6,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Circle</title>
+  <title>{% block title %}{% endblock %}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -33,7 +33,7 @@
     <div class="bounds">
       <div class="circle--fluid">
         <div class="circle--fluid--cell">
-          <h1 class="hide-text circle--logo"><a class="logo" href="index.html">Circle</a></h1>
+          <h1 class="hide-text circle--logo"><a class="logo" href="{% url 'home' %}">Circle</a></h1>
         </div>
         <div class="circle--fluid--cell circle--fluid--primary">
           <div class="circle--search">
@@ -62,18 +62,11 @@
     </div>
   </header>
 
-  <div class="circle--actions--bar">
-    <nav class="bounds">
-      <ul class="circle--pill--list">
-        <li><a href="applications.html">Applications</a></li>
-        <li><a class="selected" href="profile.html">Profile</a></li>
-      </ul>
-    </nav>
-  </div>
+
+    {% block content %}
+    {% endblock %}
 
 
-  {% block content %}
-  {% endblock %}
   <script type="text/javascript" src="{% static 'js/autogrow.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/app.js' %}"></script>

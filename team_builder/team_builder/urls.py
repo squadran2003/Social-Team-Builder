@@ -18,12 +18,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from . import views
+from .views import ProjectHomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls',namespace='accounts')),
-    path(r'',views.home,name='home')
+    path('projects/',include('projects.urls',namespace='projects')),
+    path(r'',ProjectHomeView.as_view(),name='home')
 ]
 urlpatterns+=staticfiles_urlpatterns()
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

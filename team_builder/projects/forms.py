@@ -1,21 +1,16 @@
 from django.forms import inlineformset_factory, TextInput
 from django.forms import ModelForm
+from django.forms.models import inlineformset_factory
 from accounts.models import User
-from .models import Project
 
-class ProjectForm(ModelForm):
+from .models import Project, Position
+
+class PositionForm(ModelForm):
     class Meta:
-        model = Project
-        fields = ['title','url']
-        widgets = {
-            'title': TextInput(attrs={'placeholder': 'Project Name'}),
-            'url': TextInput(
-                attrs={'placeholder': 'Project URL'}),
-        }
+        model = Position
+        fields = ('title','description')
 
-ProjectFormSet = inlineformset_factory(User, 
-                                        Project,form=ProjectForm,
-                                        extra=0,can_delete=True)
-        
+ProjectPositionFormset = inlineformset_factory(Project, Position,form=PositionForm,
+                                                extra=0)
 
 

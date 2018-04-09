@@ -1,13 +1,22 @@
 [] users should be able to create a profile
    avatar
    bio
-   pick their skills from a list
-[] Users should be able to post a project
+
+[] Users should be able add projects worked on
    title
-   description
-[] users should be able to post a job
-   description of what the position is for
+   url
+
+[] Users shoudl be able to add their skills
+
+[]User should be able to upload a project/job that need to be done
+  The project will have a title description
+  positions required for that project, able to apply for it/has it been filed
+  each project will have a timeline
+  each project with have requirements
+
+
 [] Users should be able to find projects and ask to join it
 [] As a project owner you can allow a deny a person from joining the project
 [] login and logout links too
+
 
