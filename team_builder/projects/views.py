@@ -33,6 +33,12 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         return data
     
     def form_valid(self, form):
+        data = self.get_context_data()
+        positions = data['formset'].save(commit=False)
+        if positions.is_valid():
+            for position in positions:
+                position.project = form.instance
+                position.save()
         form.instance.user = self.request.user
         return super(CreateProjectView,self).form_valid(form)
     
