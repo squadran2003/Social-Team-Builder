@@ -21,9 +21,9 @@ class Project(models.Model):
 
 
 class Position(models.Model):
-    project = models.ManyToManyField(Project)
     title = models.CharField(max_length=100)
     description = models.TextField(default='')
+    project = models.ManyToManyField(Project)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

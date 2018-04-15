@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from .models import Project
-from .forms import ProjectPositionFormset
+from .forms import PositionFormset
 
 # Create your views here.
 
@@ -23,12 +23,13 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         form.fields['description'].label=''
         return form 
     
+    
     def get_context_data(self, **kwargs):
         data = super(CreateProjectView,self).get_context_data(**kwargs)
         if self.request.POST:
-            data['positions']= ProjectPositionFormset(self.request.POST)
+            data['formset']= PositionFormset(self.request.POST)
         else:
-            data['positions']=ProjectPositionFormset(instance=self.get_object())
+            data['formset']=PositionFormset()
         return data
     
     def form_valid(self, form):
