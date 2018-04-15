@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static from staticfiles %}
 {%  block content %}
 {{ form.non_field_errors }}
 <form method="POST" action=''>
@@ -21,13 +22,16 @@
             </div>
             <div class='circle--project--positions'>
                 {{ formset.management_form }}
-                <h2>Add Positions</h2>
-                <ul class='circle--group--list circle--clone--list'>
+                <h2>Positions</h2>
+                <ul id='positions' class='circle--group--list circle--clone--list'>
                    {% for form in formset %}
-                     <li>{{form.title}}</li>
-                     <li>{{form.description}}</li>
-                    {% endfor %}
+                    <li>
+                        {{form.title}}
+                        {{form.description}}
+                   </li>
+                   {% endfor %}
                 </ul>
+                <input type='submit' class='button button-primary' value='Save Project'>
             </div>
 
         </div>
