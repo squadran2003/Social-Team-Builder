@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static from staticfiles %}
 {% block content %}
 <div class="bounds circle--page">
     <div class='circle--page--header circle--fluid'>
@@ -12,29 +13,45 @@
         </div>
     </div>
     <div class='grid-25'>
+        <div class='circle--filter circle--secondary--module'>
+            <h4>Project Needs</h4>
+            <ul class='circle--filter--list'>
+                {% if positions%}
+                    <li><a {% if filter == 'All Needs' %}class='selected'{% endif %} href='{% url 'projects:filter' filter='All Needs' %}'>All Needs</a></li>
+                    {% for position in positions%}
+                        <li><a {% if filter == position.title %}class='selected' {% endif %} href='{% url 'projects:filter' filter=position%}'>{{position.title}}</a></li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
 
     </div>
     <div class='grid-70 grid-push-5'>
-        <table class="u-full-width circle--table">
-            <thead>
-                <tr>
-                    <th>Project Title</th>
-                    <th class="circle--cell--right">Project Needs</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for project in projects %}
-                    <tr class="clickable-row">
-                        <td>
-                            <h3>{{ project.title}}</h3>
-                        </td>
-                        <td class="circle--cell--right">
-                            <span class="secondary-label">{{project.position.all}}</span>
-                        </td>
+        {% if projects %}
+            <table class="u-full-width circle--table">
+                <thead>
+                    <tr>
+                        <th>Project Title</th>
+                        <th class="circle--cell--right">Project Needs</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                        <tr class="clickable-row" data-href="{% url 'projects:detail' pk=project.id%}">
+                            <td>
+                                <h3>{{ project.title}}</h3>
+                            </td>
+                            <td class="circle--cell--right">
+                                <span class="secondary-label">{{project.position_set.all|join:', '}}</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        {% else %}
+            <h2>No projects have been created yet!</h2>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

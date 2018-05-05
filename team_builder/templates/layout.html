@@ -63,24 +63,18 @@
   </header>
 
 
-    {% block content %}
-    {% endblock %}
-
+  {% block content %}
+  {% endblock %}
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+  {% block js%}
+  {% endblock %}
+  
 
   <script type="text/javascript" src="{% static 'js/autogrow.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
-  
-  <script type="text/javascript">
-    $(function() {
-        $('#positions li').formset({
-  
-            addCssClass:'button button-primary',
-        });
-    })
-  </script>
+
   
 
 

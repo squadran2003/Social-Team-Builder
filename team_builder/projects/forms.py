@@ -6,6 +6,7 @@ from accounts.models import User
 from .models import Project,Position
 
 
+
 class PositionForm(ModelForm):
     class Meta:
         model = Position
@@ -20,8 +21,8 @@ class PositionForm(ModelForm):
 
         
 
-PositionFormset = modelformset_factory(Position, form=PositionForm,extra=1,can_delete=True)
-    
+PositionFormset = modelformset_factory(Position, form=PositionForm,extra=0,can_delete=True)
+  
 
 
 

@@ -12,11 +12,12 @@ import os
 
 # Create your models here.
 class UserManager(BaseUserManager):
-	def create_user(self, email, password=None):
+	def create_user(self, email,password=None):
 		if not email:
 			raise ValueError("users must have a email address")
 		user = self.model(
 			email = self.normalize_email(email),
+
 		)
 		user.set_password(password)
 		user.save()

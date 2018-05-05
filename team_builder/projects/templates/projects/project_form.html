@@ -21,14 +21,13 @@
                 {{form.description}}
             </div>
             <div class='circle--project--positions'>
-                {{ formset.management_form }}
+                {{ positions_formset.management_form }}
                 <h2>Positions</h2>
-                <ul id='positions' class='circle--group--list circle--clone--list'>
-                   {% for form in formset %}
-                    <li>
-                        {{form.title}}
-                        {{form.description}}
-                   </li>
+                <ul class='circle--group--list circle--clone--list'>
+                   {% for form in positions_formset.forms %}
+                    <li id='positions'>
+                        {{form}}
+                    </li>
                    {% endfor %}
                 </ul>
                 <input type='submit' class='button button-primary' value='Save Project'>
@@ -51,4 +50,13 @@
     </div>
 </form>
 
+{% endblock %}
+{% block js%}
+<script type="text/javascript">
+  $(function() {
+      $('#positions').formset({
+        prefix: '{{ fs1.prefix }}'
+      });
+  })
+</script>
 {% endblock %}

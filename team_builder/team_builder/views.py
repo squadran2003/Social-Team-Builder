@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.urls import reverse_lazy
-from projects.models import Project
+from projects.models import Project, Position
 
 class ProjectHomeView(ListView):
     model = Project
@@ -12,7 +12,11 @@ class ProjectHomeView(ListView):
 
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Project.objects.filter(user=self.request.user)
-        else:
-            return Project.objects.all()
+        return Project.objects.all().prefetch_related('position_set')
+    
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data['positions']= Position.objects.all()
+        data['filter']= 'All Needs'
+        return data
+    

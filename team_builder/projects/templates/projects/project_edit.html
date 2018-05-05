@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+{%  block content %}
+<form action='' method="POST">
+  {% csrf_token %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+        <a class="button button-primary" href="project.html">Save Changes</a>
+        <a class="button button-text" href="index.html">Delete Project</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--body">
+        {{form.title}}
+        {{form.description}}
+      </div>
+
+      <div class="circle--project--positions">
+        <h2>Positions</h2>
+          <ul class="circle--group--list circle--clone--list">
+            {{ positions_formset.management_form }}
+            {% for form in positions_formset.forms %} 
+              <li id='positions'>
+                  {{ form.title }}
+                  {{ form.description }}
+                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+
+              </li>
+            {% endfor %}
+
+          </ul>
+        </div>
+        <input type="submit" class="button button-primary" value="Save Changes">
+
+    </div>
+
+    <div class="grid-25 grid-push-5">
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+            {{form.timeline}}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Application Requirements</h3>
+            {{ form.requirements}}
+      </div>
+
+    </div>
+</form>
+{% endblock %}
+{% block js%}
+<script type="text/javascript">
+  $(function() {
+      $('#positions').formset({
+        prefix: '{{ fs1.prefix }}'
+      });
+  })
+</script>
+{% endblock %}

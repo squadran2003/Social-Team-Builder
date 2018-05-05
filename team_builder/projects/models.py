@@ -23,7 +23,10 @@ class Project(models.Model):
 class Position(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(default='')
-    project = models.ManyToManyField(Project)
+    projects = models.ManyToManyField(Project)
+    applicant = models.ManyToManyField(User)
+    applied = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
