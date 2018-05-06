@@ -21,14 +21,13 @@
 
       <div class="circle--project--positions">
         <h2>Positions</h2>
-          <ul class="circle--group--list circle--clone--list">
+          <ul id='positions' class="circle--group--list circle--clone--list">
             {{ positions_formset.management_form }}
             {% for form in positions_formset.forms %} 
-              <li id='positions'>
+              <li {% if not form.instance.pk %}class='dynamic' {% endif %}>
                   {{ form.title }}
                   {{ form.description }}
-                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-
+                  {% if form.instance.pk %}{{ a_form.DELETE }}{% endif %}
               </li>
             {% endfor %}
 
@@ -51,13 +50,4 @@
 
     </div>
 </form>
-{% endblock %}
-{% block js%}
-<script type="text/javascript">
-  $(function() {
-      $('#positions').formset({
-        prefix: '{{ fs1.prefix }}'
-      });
-  })
-</script>
 {% endblock %}
