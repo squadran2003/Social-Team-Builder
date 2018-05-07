@@ -25,6 +25,7 @@
             {{ positions_formset.management_form }}
             {% for form in positions_formset.forms %} 
               <li {% if not form.instance.pk %}class='dynamic' {% endif %}>
+                  {{form.id}}
                   {{ form.title }}
                   {{ form.description }}
                   {% if form.instance.pk %}{{ a_form.DELETE }}{% endif %}

@@ -44,7 +44,7 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
             for position in positions:
                 # check if position exists
                 try:
-                    '''if it exists just had the projects dont
+                    '''if the position exists just had the projects dont
                     create a new position
                     '''
                     exis_position = Position.objects.get(title=position.title)
@@ -78,9 +78,9 @@ class ProjectUpdateView(UpdateView):
         form.fields['title'].widget.attrs['class']='circle--input--h1'
         return form 
     
-    # def get_success_url(self):
-    #     instance = self.get_object()
-    #     return reverse_lazy('projects:detail',kwargs={'pk':instance.pk})
+    def get_success_url(self):
+        instance = self.get_object()
+        return reverse_lazy('projects:detail',kwargs={'pk':instance.pk})
     
     def get_context_data(self, **kwargs):
         data = super(ProjectUpdateView,self).get_context_data(**kwargs)
@@ -100,11 +100,11 @@ class ProjectUpdateView(UpdateView):
         instance.user = self.request.user
         instance.save()
         positions_formset = data['positions_formset']
+        print(positions_formset)
         if positions_formset.is_valid():
-            print("check if formset is valid")
+            print("formset is valid")
             positions = positions_formset.save(commit=False)
-            for position in positions:
-                position.save()
+            print(positions)
         return super(ProjectUpdateView,self).form_valid(form)
 
 
