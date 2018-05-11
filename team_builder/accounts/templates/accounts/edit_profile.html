@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
 {% block content %}
-  <form id="profile-form" class='dynamic-form' action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+  <form id="profile-form" action="" enctype="multipart/form-data" method="post">{% csrf_token %}
       <div class="bounds circle--page">
         <div class="circle--page--header circle--fluid">
           <div class="circle--fluid--cell circle--fluid--primary">
@@ -50,11 +50,10 @@
         <div class="grid-25 grid-push-5">
           {% if form.instance.image %}
           <div class="circle--secondary--module">
-              <img src="{{ form.instance.image.url }}">
+              <img class="avatar" src="{{ form.instance.image.url }}">
           </div>
-          <p>Change Photo</p>
           <input type="file" value="change image" name="image" id="id_image">
-          <a class="button" id="upload_link" >Upload new Photo</a>
+          <a class="button" id="upload_link" >Change Photo</a>
           <hr>
           {% else %}
           <div class="circle--secondary--module">
@@ -66,40 +65,36 @@
           {% endif %}
           <div class="circle--secondary--module">
             <h4>My Skills</h4>
-            <ul class="circle--clone--list">
-              <li>
-                <input type="text" placeholder="Skill" />
-                <a class="circle--clone--add">Add Skill</a>
-                <a class="circle--clone--remove">Remove</a>
-              </li>
+            {{ SkillsFormset.management_form }}
+            <ul id="skills" class="circle--clone--list">
+              {% for skill in SkillsFormset.forms %}
+              <li {% if not skill.instance.pk %}class='dynamic'{% endif %}>
+                  {{ skill.id }}
+                  {{ skill.name}}
+                  {% if skill.instance.pk %}{{ skill.DELETE }}{% endif %}
+                </li>
+              {% endfor %}
             </ul>
           </div>
 
           <div class="circle--secondary--module">
             <h4>My Projects</h4>
-            <ul class="circle--clone--list">
+            {{ UserCompletedProjects.management_form }}
+            <ul id='completed_projects' class="circle--clone--list">
+                {% for form in UserCompletedProjects.forms %}
+                <li {% if not form.instance.pk %}class='dynamic'{% endif %}>
+                  {{form.id}}
+                  {{ form.title }}
+                  {{ form.url}}
+                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                </li>
+              {% endfor %}
             </ul>
+           
           </div>
         </div>
 
       </div>
-      <table border="0" cellpadding="0" cellspacing="0">
-        <tbody>
-            {% for form in projects.forms %}
-            <tr>
-               <td>
-                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-                  {{ form.title }}
-               </td>
-               <td>{{ form.url }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-
-    </table>
-    {{ projects.management_form }}
-
-
 </form>
 
 

@@ -9,8 +9,6 @@ class ProjectHomeView(ListView):
     fields = ('title','requirements')
     template_name = 'index.html'
 
-
-
     def get_queryset(self):
         return Project.objects.all().prefetch_related('position_set')
     

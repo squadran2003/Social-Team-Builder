@@ -86,7 +86,8 @@ class ProjectUpdateView(UpdateView):
         data = super(ProjectUpdateView,self).get_context_data(**kwargs)
         project = Project.objects.get(pk=self.kwargs.get('pk'))
         if self.request.POST:
-            data['positions_formset']= PositionFormset(self.request.POST)
+            data['positions_formset']= PositionFormset(self.request.POST,
+            )
 
         else:
             data['positions_formset']=PositionFormset(queryset=Position.objects.filter(
@@ -100,11 +101,14 @@ class ProjectUpdateView(UpdateView):
         instance.user = self.request.user
         instance.save()
         positions_formset = data['positions_formset']
-        print(positions_formset)
+        # get all positions 
         if positions_formset.is_valid():
-            print("formset is valid")
             positions = positions_formset.save(commit=False)
-            print(positions)
+            for position in positions:
+                position.save()
+                position.projects.add(instance)
+                position.save()
+            positions_formset.save()
         return super(ProjectUpdateView,self).form_valid(form)
 
 
@@ -127,6 +131,28 @@ class PositionFilterView(ListView):
         data['projects'] = self.get_queryset()
         data['positions']= Position.objects.all()
         data['filter']= self.kwargs.get('filter')
+        return data
+
+class PositionSearchView(ListView):
+    model = Project
+    fields = ('title','description')
+    context_object = 'projects'
+    success_url = 'home'
+    template_name = 'index.html'
+
+
+
+    def get_queryset(self):
+        search_val = self.request.GET.get('search')
+        return Project.objects.filter(title__icontains=search_val)
+
+    
+    def get_context_data(self, **kwargs):
+        data = super(PositionSearchView,self).get_context_data(**kwargs)
+        data['projects'] = self.get_queryset()
+        search_val = self.request.GET.get('search')
+        data['positions']= Position.objects.filter(projects__title__icontains=search_val)
+        data['search_val']= search_val
         return data
 
 class UpdatePositionAppliedStatus(UpdateView):

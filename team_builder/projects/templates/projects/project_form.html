@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
+{% block title %}{{ form.title}} {% endblock %}
 {%  block content %}
 {{ form.non_field_errors }}
 <form method="POST" action=''>

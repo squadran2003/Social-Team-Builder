@@ -10,7 +10,11 @@ from django.shortcuts import render
 from PIL import Image
 from django.conf import settings
 from . import forms
+from projects.forms import UserCompletedProjectFormset
+from skills.forms import SkillFormset
 from .models import User
+from skills.models import Skill
+from projects.models import UserCompletedProject
 
 
 
@@ -18,6 +22,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     success_url = reverse_lazy('home')
     form_class = forms.UserCreateForm
+    context_object = 'user'
  
 
     def get_object(self):
@@ -32,6 +37,30 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         else:
              return 'accounts/edit_profile.html'
     
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['UserCompletedProjects']= UserCompletedProjectFormset(
+                                            self.request.POST)
+            data['SkillsFormset'] = SkillFormset(
+                                            self.request.POST)
+        else:
+            data['UserCompletedProjects']= UserCompletedProjectFormset()
+            # check if there are any completed projects for the user
+            projects = UserCompletedProject.objects.filter(user=self.get_object())
+            # check if the user has added skills
+            skills = Skill.objects.filter(user=self.get_object())
+            if not projects:
+                # if there are no projects send a extra form through
+                data['UserCompletedProjects'].extra=1
+            elif not skills:
+                # if there are no skills send a extra form through
+                data['SkillsFormset'].extra=1
+            data['SkillsFormset']= SkillFormset()
+        return data
+
+
+    
     
     def get_form(self, *args, **kwargs):
         form = super(ProfileView, self).get_form(*args, **kwargs)
@@ -41,6 +70,27 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         form.fields['bio'].widget.attrs['placeholder']='Tell us about yourself...'
         form.fields['bio'].label=''
         return form 
+    
+    def form_valid(self, form):
+        data = self.get_context_data()
+        instance = form.save(commit=False)
+        completed_projects = data['UserCompletedProjects']
+        skills_formset = data['SkillsFormset']
+        if completed_projects.is_valid() and skills_formset.is_valid():
+            projects = completed_projects.save(commit=False)
+            skills = skills_formset.save(commit=False)
+            for project in projects:
+                project.user = instance
+                project.save()
+            for skill in skills:
+                skill.user = instance
+                skill.save()
+            completed_projects.save()
+            skills_formset.save()
+        instance.save()
+            
+        return super().form_valid(form)
+        
     
 
         

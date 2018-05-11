@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
+{% block title %}| edit {{ form.instance.title }} {% endblock %}
 {%  block content %}
 <form action='' method="POST">
   {% csrf_token %}
@@ -24,11 +25,11 @@
           <ul id='positions' class="circle--group--list circle--clone--list">
             {{ positions_formset.management_form }}
             {% for form in positions_formset.forms %} 
-              <li {% if not form.instance.pk %}class='dynamic' {% endif %}>
+              <li {% if not form.instance.pk %}class='dynamic'{% endif %}>
                   {{form.id}}
                   {{ form.title }}
                   {{ form.description }}
-                  {% if form.instance.pk %}{{ a_form.DELETE }}{% endif %}
+                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
               </li>
             {% endfor %}
 

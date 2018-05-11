@@ -11,6 +11,7 @@ urlpatterns = [
     path(r'update/<int:pk>/', ProjectUpdateView.as_view(), name='update'),
     path(r'update/position/<int:pk>/', UpdatePositionAppliedStatus.as_view(), name='update-position'),
     path(r'filter/<filter>/',PositionFilterView.as_view(), name='filter'),
+    path(r'search/',PositionSearchView.as_view(), name='search'),
 
 
 

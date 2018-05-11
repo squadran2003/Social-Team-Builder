@@ -647,3 +647,6 @@ ul{
 .modal-header h4{
     color:white;
 }
+.avatar{
+  max-width:100%;
+}
