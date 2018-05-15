@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
+{% block title %}{{ block.super }}|{{ user.full_name }}- profile{% endblock %}
 {% block content %}
   <form id="profile-form" action="" enctype="multipart/form-data" method="post">{% csrf_token %}
       <div class="bounds circle--page">
@@ -68,7 +69,7 @@
             {{ SkillsFormset.management_form }}
             <ul id="skills" class="circle--clone--list">
               {% for skill in SkillsFormset.forms %}
-              <li {% if not skill.instance.pk %}class='dynamic'{% endif %}>
+              <li {% if not completed_project.instance.pk %}class='dynamic'{% endif %}>
                   {{ skill.id }}
                   {{ skill.name}}
                   {% if skill.instance.pk %}{{ skill.DELETE }}{% endif %}
@@ -79,14 +80,14 @@
 
           <div class="circle--secondary--module">
             <h4>My Projects</h4>
-            {{ UserCompletedProjects.management_form }}
+            {{ CompletedProjectsFormset.management_form }}
             <ul id='completed_projects' class="circle--clone--list">
-                {% for form in UserCompletedProjects.forms %}
-                <li {% if not form.instance.pk %}class='dynamic'{% endif %}>
-                  {{form.id}}
-                  {{ form.title }}
-                  {{ form.url}}
-                  {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                {% for completed_project in CompletedProjectsFormset.forms %}
+                <li {% if not completed_project.instance.pk %}class='dynamic'{% endif %}>
+                  {{completed_project.id}}
+                  {{ completed_project.title }}
+                  {{ completed_project.url}}
+                  {% if completed_project.instance.pk %}{{ completed_project.DELETE }}{% endif %}
                 </li>
               {% endfor %}
             </ul>

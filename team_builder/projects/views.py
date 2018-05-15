@@ -65,6 +65,9 @@ class ProjectDetailView(DetailView):
     fields = ('title','description')
     context_object = 'project'
 
+
+
+
 class ProjectUpdateView(UpdateView):
     model = Project
     template_name = 'projects/project_edit.html'
@@ -155,19 +158,7 @@ class PositionSearchView(ListView):
         data['search_val']= search_val
         return data
 
-class UpdatePositionAppliedStatus(UpdateView):
-    model = Position
-    fields = ('applied',)
-    success_url = reverse_lazy('home')
 
-    def form_valid(self, form):
-        position = form.save(commit=False)
-        position.applied = True
-        position.save()
-        position.applicant.add(self.request.user)
-        position.save()
-
-        return super().form_valid(form)
     
 
 

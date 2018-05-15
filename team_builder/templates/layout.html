@@ -6,7 +6,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Team builder {% block title %} {% endblock %}</title>
+  <title>{% block title %} Team builder {% endblock %}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -78,11 +78,15 @@
 
         $('#skills li').formset({
           addText:'Add Skill',
+          prefix:'{{ SkillsFormset.prefix }}',
+          formCssClass: 'dynamic-SkillsFormset'
         
         });
 
         $('#completed_projects li').formset({
           addText:'Add Project',
+          prefix:'{{ CompletedProjectsFormset.prefix }}',
+          formCssClass: 'dynamic-CompletedProjectsFormset'
           
         });
     })

@@ -20,13 +20,14 @@ from projects.models import UserCompletedProject
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('accounts:profile',kwargs={'option':None})
     form_class = forms.UserCreateForm
     context_object = 'user'
  
 
     def get_object(self):
         return User.objects.get(pk=self.request.user.id)
+
  
     def get_template_names(self):
         """this method checks the option,
@@ -40,23 +41,32 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         data = super().get_context_data(**kwargs)
         if self.request.POST:
-            data['UserCompletedProjects']= UserCompletedProjectFormset(
-                                            self.request.POST)
+            data['CompletedProjectsFormset']= UserCompletedProjectFormset(
+                                            self.request.POST,
+                                            prefix='completed_projects')
             data['SkillsFormset'] = SkillFormset(
-                                            self.request.POST)
+                                            self.request.POST,
+                                            prefix='skills')
         else:
-            data['UserCompletedProjects']= UserCompletedProjectFormset()
+            data['CompletedProjectsFormset']= UserCompletedProjectFormset(
+                    prefix='completed_projects',
+                    queryset=UserCompletedProject.objects.filter(user=self.get_object())
+                                            )
+            data['SkillsFormset']= SkillFormset(
+                    prefix='skills',
+                    queryset=Skill.objects.filter(user=self.get_object())
+                )
             # check if there are any completed projects for the user
             projects = UserCompletedProject.objects.filter(user=self.get_object())
             # check if the user has added skills
             skills = Skill.objects.filter(user=self.get_object())
+            print(skills)
             if not projects:
                 # if there are no projects send a extra form through
-                data['UserCompletedProjects'].extra=1
-            elif not skills:
+                data['CompletedProjectsFormset'].extra=1
+            if not skills: 
                 # if there are no skills send a extra form through
                 data['SkillsFormset'].extra=1
-            data['SkillsFormset']= SkillFormset()
         return data
 
 
@@ -74,7 +84,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         data = self.get_context_data()
         instance = form.save(commit=False)
-        completed_projects = data['UserCompletedProjects']
+        completed_projects = data['CompletedProjectsFormset']
         skills_formset = data['SkillsFormset']
         if completed_projects.is_valid() and skills_formset.is_valid():
             projects = completed_projects.save(commit=False)
@@ -85,18 +95,12 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             for skill in skills:
                 skill.user = instance
                 skill.save()
-            completed_projects.save()
             skills_formset.save()
+            completed_projects.save()
         instance.save()
-            
         return super().form_valid(form)
         
     
-
-        
-
-
-
 class loginView(FormView):
     template_name = 'accounts/login.html'
     form_class = AuthenticationForm

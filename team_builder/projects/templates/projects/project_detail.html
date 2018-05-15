@@ -36,15 +36,16 @@
                 <li>
                     <h3>{{ position.title }}</h3>
                     <p>{{position.description}}</p>
-                    {% if user.is_authenticated and project.user == user == False%}
-                      <form method='POST' action='{% url 'projects:update-position' pk=position.id %}'>
+                    {% if user.is_authenticated and not project.user == user %}
+                      <form method='POST' action='{% url 'applications:add' project_id=project.id position_id=position.id %}'>
                         {% csrf_token %}
-                            {% if not position.applied %}
-                            <input type='submit' class="button button-primary" value='apply'>
-                
-                            {% else %}
-                            <input type='submit' value='applied' class="button button-primary button-inactive">
-                            {% endif %}
+                              <input type='submit' value='applied' class="button button-primary button-inactive">
+                              {% for app in position.application_set.all %}
+                                {{ app.user.email }}
+                              {% endfor %}
+    
+
+    
                       </form>
                     {% endif %}
                 </li>

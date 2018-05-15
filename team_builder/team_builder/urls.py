@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls',namespace='accounts')),
     path('projects/',include('projects.urls',namespace='projects')),
+    path('applications/',include('applications.urls',namespace='applications')),
     path(r'',ProjectHomeView.as_view(),name='home')
 ]
 urlpatterns+=staticfiles_urlpatterns()
