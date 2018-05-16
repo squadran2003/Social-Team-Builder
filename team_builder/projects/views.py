@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .models import Project, Position
 from .forms import PositionFormset
 
+
 # Create your views here.
 
 class CreateProjectView(LoginRequiredMixin, CreateView):

@@ -19,13 +19,20 @@ class CreateApplicationView(LoginRequiredMixin, CreateView):
         return reverse_lazy('projects:detail',kwargs={'pk':self.kwargs.get('project_id')})
     
     def form_valid(self, form):
-        instance = form.save(commit=False)
+        """check if the logged in user has
+         has already applied for a given position
+        """
         position = Position.objects.get(pk=self.kwargs.get('position_id'))
+        if position.application_set.filter(user=self.request.user).exists():
+            return self.form_invalid(form)
+        instance = form.save(commit=False)
         instance.position = position
         instance.save()
         instance.user.add(self.request.user)
         instance.save()
         return super().form_valid(form)
+    
+
 
 
 
