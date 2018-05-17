@@ -39,9 +39,7 @@
                     {% if user.is_authenticated and not project.user == user %}
                     <form method="POST" action="{% url 'applications:add' project_id=project.id position_id=position.id %}">
                       {% csrf_token %}
-                      {% if application_error %}
-                        {{application_error}}
-                      {% endif %}
+                      {{ form.errors}}
                       <input type='submit' value='apply' class="button button-primary">
                     </form>
                     {% endif %}
