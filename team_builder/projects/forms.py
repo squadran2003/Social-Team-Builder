@@ -1,5 +1,6 @@
 from django.forms import inlineformset_factory, TextInput
 from django.forms import ModelForm
+from django import forms
 from django.forms.models import modelformset_factory
 from accounts.models import User
 
@@ -18,6 +19,10 @@ class PositionForm(ModelForm):
         self.fields['title'].label=''
         self.fields['description'].widget.attrs['placeholder']='description'
         self.fields['description'].label=''
+
+
+    
+
 
         
 

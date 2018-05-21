@@ -32,15 +32,19 @@
 
 </head>
 <body>
-  {% if messages %}
+{% if messages %}
     {% for message in messages %}
       {% if message.tags == 'error' %}
         <div class="alert alert-danger">
           {{ message}}
         </div>
+      {% else %}
+        <div class="alert alert-success">
+          {{ message}}
+        </div>
       {% endif %}
     {% endfor %}
-{% endif %}
+  {% endif %}
   <header class="circle--header">
     <div class="bounds">
       <div class="circle--fluid">
@@ -77,8 +81,8 @@
     </div>
   </header>
 
-
   {% block content %}
+
   {% endblock %}
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>

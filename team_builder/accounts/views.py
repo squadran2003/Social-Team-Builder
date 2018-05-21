@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.urls import reverse, reverse_lazy
@@ -99,7 +100,11 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             completed_projects.save()
         instance.save()
         return super().form_valid(form)
-        
+
+class ApplicantView(LoginRequiredMixin, DetailView):     
+    model = User
+    context_object = 'user'
+    template_name = 'accounts/profile.html'
     
 class loginView(FormView):
     template_name = 'accounts/login.html'

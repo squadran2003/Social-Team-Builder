@@ -9,8 +9,8 @@
 <div class="circle--actions--bar">
     <nav class="bounds">
       <ul class="circle--pill--list">
-        <li><a href="applications.html">Applications</a></li>
-        <li><a class="selected" href="profile.html">Profile</a></li>
+        <li><a href="{% url 'applications:list' %}">Applications</a></li>
+        <li><a class="selected" href="{% url 'accounts:profile' option=None %}">Profile</a></li>
       </ul>
     </nav>
   </div>
@@ -21,13 +21,13 @@
         <h2>Profile</h2>
       </div>
       <div class="circle--fluid--cell circle--fluid--secondary">
-        <a class="button icon-on-left" href="{% url 'accounts:edit_profile' %}">Edit</a>
+         <a class="button icon-on-left" href="{% url 'accounts:edit_profile' %}">Edit</a>
       </div>
     </div>
 
     <div class="grid-70">
       {% if not user.full_name %}
-        <h1>{{ user.display_name }}</h1>
+        <h1>{{ logged_in_user.display_name }}</h1>
       {% else %}
         <h1>{{ user.full_name }}</h1>
       {% endif %}

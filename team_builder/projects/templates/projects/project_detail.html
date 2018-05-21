@@ -37,11 +37,10 @@
                     <h3>{{ position.title }}</h3>
                     <p>{{position.description}}</p>
                     {% if user.is_authenticated and not project.user == user %}
-                    <form method="POST" action="{% url 'applications:add' project_id=project.id position_id=position.id %}">
-                      {% csrf_token %}
-                      {{ form.errors}}
-                      <input type='submit' value='apply' class="button button-primary">
-                    </form>
+                      <form method="POST" action="{% url 'applications:add' project_id=project.id position_id=position.id %}">
+                        {% csrf_token %}
+                          <input type='submit' value='apply' class="button button-primary">
+                      </form>
                     {% endif %}
                </li>
           {% endfor %}

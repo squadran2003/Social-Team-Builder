@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 from django.urls import reverse_lazy
 
@@ -60,13 +62,12 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
                     exis_position.save()
         return super(CreateProjectView,self).form_valid(form)
 
+
 class ProjectDetailView(DetailView):
     model = Project
     template_name = 'projects/project_detail.html'
     fields = ('title','description')
     context_object = 'project'
-
-
 
 
 class ProjectUpdateView(UpdateView):
@@ -89,14 +90,16 @@ class ProjectUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ProjectUpdateView,self).get_context_data(**kwargs)
         project = Project.objects.get(pk=self.kwargs.get('pk'))
+        queryset = Position.objects.filter(projects=project)
         if self.request.POST:
-            data['positions_formset']= PositionFormset(self.request.POST,
-            )
-
+            data['positions_formset']= PositionFormset(self.request.POST)
         else:
-            data['positions_formset']=PositionFormset(queryset=Position.objects.filter(
-                projects=project
-            ))
+            if queryset:
+                data['positions_formset']=PositionFormset(queryset=queryset)
+            else:
+                # if there are no position send a extra form
+                data['positions_formset']=PositionFormset(queryset=queryset)
+                data['positions_formset'].extra=1
         return data
     
     def form_valid(self, form):
@@ -109,9 +112,20 @@ class ProjectUpdateView(UpdateView):
         if positions_formset.is_valid():
             positions = positions_formset.save(commit=False)
             for position in positions:
-                position.save()
-                position.projects.add(instance)
-                position.save()
+                try:
+                    '''if the position exists just had the projects dont
+                    create a new position
+                    '''
+                    exis_position = Position.objects.get(title=position.title)
+                except Position.DoesNotExist:
+                    #position doesnt exist, add it and its projects
+                    position.save()
+                    position.projects.add(instance)
+                    position.save()
+                else:
+                    # only add the projects not the position
+                    exis_position.projects.add(instance)
+                    exis_position.save()
             positions_formset.save()
         return super(ProjectUpdateView,self).form_valid(form)
 
