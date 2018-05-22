@@ -94,7 +94,7 @@ class ProjectUpdateView(UpdateView):
         positions_formset = data['positions_formset']
         # get all positions 
         if positions_formset.is_valid():
-            positions_formset.save_existing(project_instance=instance)
+            positions_formset.save(project_instance = instance)
         return super(ProjectUpdateView,self).form_valid(form)
 
 
