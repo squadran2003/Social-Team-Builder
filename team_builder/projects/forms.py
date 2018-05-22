@@ -1,3 +1,4 @@
+from django.forms import BaseModelFormSet
 from django.forms import inlineformset_factory, TextInput
 from django.forms import ModelForm
 from django import forms
@@ -21,12 +22,36 @@ class PositionForm(ModelForm):
         self.fields['description'].label=''
 
 
-    
+class BasePositionFormset(BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BasePositionFormset, self).__init__(*args, **kwargs)
+
+    def save(self, project_instance):
+        instances = super().save(commit=False)
+        for instance in instances:
+            try:
+                """check if a postion exists"""
+                exis_pos = Position.objects.get(title=instance.title)
+            except Position.DoesNotExist:
+                """ if doesnt exists create it and add the relationship"""
+                instance.save()
+                instance.projects.add(project_instance)
+                instance.save()
+            else:
+                """else just add the relationship not the position"""
+                exis_pos.projects.add(project_instance)
+                exis_pos.save()
+        return super().save(project_instance)
+
+
+
+
 
 
         
 
-PositionFormset = modelformset_factory(Position, form=PositionForm,extra=0,can_delete=True)
+PositionFormset = modelformset_factory(Position, form=PositionForm,
+                                        extra=0,can_delete=True,formset=BasePositionFormset)
 
 class UserCompletedProjectForm(ModelForm):
     class Meta:

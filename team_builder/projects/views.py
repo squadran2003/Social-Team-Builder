@@ -43,23 +43,7 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         instance.save()
         positions_formset = data['positions_formset']
         if positions_formset.is_valid():
-            positions = positions_formset.save(commit=False)
-            for position in positions:
-                # check if position exists
-                try:
-                    '''if the position exists just had the projects dont
-                    create a new position
-                    '''
-                    exis_position = Position.objects.get(title=position.title)
-                except Position.DoesNotExist:
-                    #position doesnt exist, add it and its projects
-                    position.save()
-                    position.projects.add(instance)
-                    position.save()
-                else:
-                    # only add the projects not the position
-                    exis_position.projects.add(instance)
-                    exis_position.save()
+            positions_formset.save(project_instance= instance)
         return super(CreateProjectView,self).form_valid(form)
 
 
@@ -110,23 +94,7 @@ class ProjectUpdateView(UpdateView):
         positions_formset = data['positions_formset']
         # get all positions 
         if positions_formset.is_valid():
-            positions = positions_formset.save(commit=False)
-            for position in positions:
-                try:
-                    '''if the position exists just had the projects dont
-                    create a new position
-                    '''
-                    exis_position = Position.objects.get(title=position.title)
-                except Position.DoesNotExist:
-                    #position doesnt exist, add it and its projects
-                    position.save()
-                    position.projects.add(instance)
-                    position.save()
-                else:
-                    # only add the projects not the position
-                    exis_position.projects.add(instance)
-                    exis_position.save()
-            positions_formset.save()
+            positions_formset.save_existing(project_instance=instance)
         return super(ProjectUpdateView,self).form_valid(form)
 
 
