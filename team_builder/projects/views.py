@@ -43,8 +43,21 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         instance.save()
         positions_formset = data['positions_formset']
         if positions_formset.is_valid():
-            positions_formset.save(project_instance= instance)
-        return super(CreateProjectView,self).form_valid(form)
+            positions = positions_formset.save(commit=False)
+            for obj in positions_formset.deleted_objects:
+                obj.projects.remove(instance)
+            for position in positions:
+                try:
+                    exis_pos = Position.objects.get(title=position.title)
+                except Position.DoesNotExist:
+                    position.save()
+                    position.projects.add(instance)
+                    position.save()
+                else:
+                    exis_pos.projects.add(instance)
+                    exis_pos.save()
+        positions_formset.save_m2m()
+        return super().form_valid(form)
 
 
 class ProjectDetailView(DetailView):
@@ -94,8 +107,21 @@ class ProjectUpdateView(UpdateView):
         positions_formset = data['positions_formset']
         # get all positions 
         if positions_formset.is_valid():
-            positions_formset.save(project_instance = instance)
-        return super(ProjectUpdateView,self).form_valid(form)
+            positions = positions_formset.save(commit=False)
+            for obj in positions_formset.deleted_objects:
+                obj.projects.remove(instance)
+            for position in positions:
+                try:
+                    exis_pos = Position.objects.get(title=position.title)
+                except Position.DoesNotExist:
+                    position.save()
+                    position.projects.add(instance)
+                    position.save()
+                else:
+                    exis_pos.projects.add(instance)
+                    exis_pos.save()
+        positions_formset.save_m2m()
+        return super().form_valid(form)
 
 
 class PositionFilterView(ListView):
