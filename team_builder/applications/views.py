@@ -11,7 +11,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Application
-from projects.models import Position, Project
+from projects.models import Project
 # Create your views here.
 
 class CreateApplicationView(LoginRequiredMixin, CreateView):

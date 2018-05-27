@@ -61,7 +61,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             projects = UserCompletedProject.objects.filter(user=self.get_object())
             # check if the user has added skills
             skills = Skill.objects.filter(user=self.get_object())
-            print(skills)
             if not projects:
                 # if there are no projects send a extra form through
                 data['CompletedProjectsFormset'].extra=1
@@ -101,20 +100,23 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         instance.save()
         return super().form_valid(form)
 
+
 class ApplicantView(LoginRequiredMixin, DetailView):     
     model = User
     context_object = 'user'
     template_name = 'accounts/profile.html'
     
+
 class loginView(FormView):
     template_name = 'accounts/login.html'
     form_class = AuthenticationForm
-    success_url = reverse_lazy('home')
-
+    success_url = reverse_lazy('accounts:profile',
+                               kwargs={'option': None})
 
     def form_valid(self, form):
         login(self.request, form.get_user())
         return super().form_valid(form)
+    
 
 class SignupView(CreateView):
     model = User

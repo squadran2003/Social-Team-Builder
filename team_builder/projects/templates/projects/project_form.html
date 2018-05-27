@@ -2,7 +2,8 @@
 {% load static from staticfiles %}
 {% block title %}{{ form.title}} {% endblock %}
 {%  block content %}
-{{ form.non_field_errors }}
+
+
 <form method="POST" action=''>
     {% csrf_token %}
     <div class='circle--actions--bar'>
@@ -27,8 +28,16 @@
                 <ul id='positions' class='circle--group--list circle--clone--list'>
                     {% for form in positions_formset.forms %} 
                     <li {% if not form.instance.pk %}class='dynamic' {% endif %}>
+                        {{ form.title.error }}
                         {{ form.title }}
+                        <datalist id="options">
+                            {% for position in positions %}
+                                <option value="{{ position.title }}">
+                            {% endfor %}
+                        </datalist>
+                        {{ form.description.error }}
                         {{ form.description }}
+                        {{ form.skills }}
                         {% if form.instance.pk %}{{ a_form.DELETE }}{% endif %}
                     </li>
                   {% endfor %}

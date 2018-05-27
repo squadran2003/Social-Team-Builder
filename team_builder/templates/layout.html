@@ -6,7 +6,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>{% block title %} Team builder {% endblock %}</title>
+  <title>Team builder {% block title %}  {% endblock %}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -89,7 +89,9 @@
 
   <script type="text/javascript">
     $(function() {
-        $('#positions li').formset();
+        $('#positions li').formset({
+          addText:'Add Position',
+        });
 
 
         $('#skills li').formset({

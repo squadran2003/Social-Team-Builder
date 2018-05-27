@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'reset_migrations',
+    'floppyforms',
     'accounts',
     'projects',
     'skills',
-    'applications'
+    'applications',
 
 
 ]
@@ -132,9 +134,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'accounts/media')
-
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'accounts/media')
 
 AUTH_USER_MODEL = "accounts.User"
 

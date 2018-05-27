@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0018_remove_position_applied'),
         ('applications', '0004_auto_20180519_2056'),
     ]
 

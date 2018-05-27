@@ -28,7 +28,13 @@
               <li {% if not form.instance.pk %}class='dynamic'{% endif %}>
                   {{form.id}}
                   {{ form.title }}
+                  <datalist id="options">
+                    {% for position in positions %}
+                        <option value="{{ position.title }}">
+                    {% endfor %}
+                </datalist>
                   {{ form.description }}
+                  {{ form.skills }}
                   {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
               </li>
             {% endfor %}

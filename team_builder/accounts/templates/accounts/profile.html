@@ -84,7 +84,7 @@
         <h4>My Skills</h4>
         <ul class="unloaded">
           {% if not user.skill_set.all %}
-            <li>You have not added any skills</li>
+            <li>No skills have added yet</li>
           {% else %}
             {% for skill in user.skill_set.all %}
             <li>{{ skill.name }}</li>
@@ -97,7 +97,7 @@
         <h4>My Projects</h4>
         <ul class="circle--link--list">
           {% if not user.usercompletedproject_set.all %}
-            <li>You have not added any completed projects yet</li>
+            <li>No projects have been added yet</li>
           {% else %}
             {% for project in user.usercompletedproject_set.all %}
             <li><a href="{{project.url}}" target="_blank">{{ project.title }}</a></li>

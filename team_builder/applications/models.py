@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from accounts.models import User
-from projects.models import Position, Project
+from projects.models import Project, Position
 
 # Create your models here.
 class Application(models.Model):

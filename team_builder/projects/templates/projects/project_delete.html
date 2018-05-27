@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block title %}| delete - {{project.title }}{% endblock %}
+{% block content %}
+<div style="text-align: center;">
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete the project "{{ project.title }}" ?</p>
+        <input type="submit" value="Confirm" />
+    </form>
+</div>
+{% endblock %}

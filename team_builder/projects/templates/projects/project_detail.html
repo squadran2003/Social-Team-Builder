@@ -6,7 +6,7 @@
     <div class="bounds">
       <div class="grid-100">
         <a class="button" href="{% url 'projects:update' pk=project.id %}">Edit Project</a>
-        <a class="button button-text" href="index.html">Delete Project</a>
+        <a class="button button-text" href="{% url 'projects:delete' pk=project.id %}">Delete Project</a>
       </div>
     </div>
   </div>
@@ -54,7 +54,9 @@
         <h3>Project Needs</h3>
         <ul class="circle--link--list">
             {% for position in project.position_set.all %}
-                <li><a>{{ position.title }}</a></li>
+              {% for skill in position.skill_set.all %}
+                 <li><a>{{ skill}}</a></li>
+              {% endfor %}
             {% endfor %}
         </ul>
       </div>
@@ -66,7 +68,7 @@
 
       <div class="circle--secondary--module">
         <h3>Applicant Requirements</h3>
-        <p>{{ project.requirements}}</p>
+        <p>{{ project.requirements }}</p>
       </div>
 
     </div>
