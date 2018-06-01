@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reset_migrations',
-    'floppyforms',
     'accounts',
     'projects',
     'skills',
     'applications',
+    'notifications',
 
 
 ]

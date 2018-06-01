@@ -1,4 +1,7 @@
 {% load static from staticfiles %}
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,6 +71,11 @@
           <nav>
             <ul class="circle--inline">
               {% if user.is_authenticated %}
+                {% if unread_count %}
+                  <li><a style="color:white;" class="glyphicon glyphicon-bell live_notify_badge" href="{% url 'notifications:unread' %}"></a></li>
+                {% else %}
+                  <li><a style="color:white;" class="glyphicon glyphicon-bell live_notify_badge" href="{% url 'notifications:all' %}"></a></li>
+                {% endif %}
                 <li><a href="{% url 'accounts:profile' option=None %}">Profile</a></li>
                 <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
               {% else %}
@@ -91,6 +99,7 @@
     $(function() {
         $('#positions li').formset({
           addText:'Add Position',
+
         });
 
 
@@ -109,6 +118,8 @@
         });
     })
   </script>
+  <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+  {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
   <script type="text/javascript" src="{% static 'js/autogrow.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/app.js' %}"></script>

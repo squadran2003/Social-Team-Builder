@@ -22,10 +22,13 @@ from .views import ProjectHomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/',include('accounts.urls',namespace='accounts')),
-    path('projects/',include('projects.urls',namespace='projects')),
-    path('applications/',include('applications.urls',namespace='applications')),
-    path(r'',ProjectHomeView.as_view(),name='home')
+    path('inbox/notifications/', include('notifications.urls', 
+                                         namespace='notifications')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('projects/', include('projects.urls', namespace='projects')),
+    path('applications/', include('applications.urls', 
+                                  namespace='applications')),
+    path(r'', ProjectHomeView.as_view(), name='home')
 ]
-urlpatterns+=staticfiles_urlpatterns()
-urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

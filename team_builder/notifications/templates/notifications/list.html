@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block content%}
+<div class="bounds circle--page circle--article">
+  <div class="grid-100">
+    <div class="circle--article--body">
+          <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i>
+          <table class="u-full-width circle--table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Received at</th>
+                    {% if notice.unread %}
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for notice in notifications %}
+                <tr>
+                    <td>
+                      <a href="{% url "accounts:applicant" pk=notice.actor.id %}">{{ notice.actor }}</a>
+                    </td>
+                    <td>
+                        {{ notice.verb }}
+                    </td>
+                    <td>
+                        {{ notice.timesince }} ago
+                    </td>
+                    {% if notice.unread %}
+                    <td>
+                        <a class="button" href="{% url 'notifications:mark_as_read' slug=notice.id %}" role="button">Mark as read</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

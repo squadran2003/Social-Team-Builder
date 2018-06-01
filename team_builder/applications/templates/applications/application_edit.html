@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+{% block title %}| edit-application- {{ form.instance.id }} {% endblock %}
+{%  block content %}
+<form action='' method="POST">
+  {% csrf_token %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+        <input type="submit" class="button button-primary" value="Save Changes">
+      </div>
+    </div>
+  </div>
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--body">
+        <p>Application No: {{form.instance.id}}</p>
+        <p><a href="{% url 'accounts:applicant' pk=form.instance.employee.id %}">Applicant: {{ form.instance.employee }}</a></p>
+        <p>Project: {{form.instance.project}}</p>
+        <p>Position: {{form.instance.position }}</p>
+        {{form.as_p}}
+    </div>
+ </div>
+</form>
+{% endblock %}

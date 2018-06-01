@@ -72,7 +72,7 @@
         <tbody>
           {% if object_list %}
             {% for application in object_list %}
-                <tr class="clickable-row" data-href="{% url 'accounts:applicant' pk=application.employee.pk %}">
+                <tr class="clickable-row" data-href="{% url 'applications:edit' pk=application.pk %}">
                     <td>
                       {% if application.employee.full_name %}
                         <h3>{{ application.employee.full_name}}</h3>

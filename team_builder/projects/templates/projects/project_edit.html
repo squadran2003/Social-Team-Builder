@@ -2,6 +2,7 @@
 {% load static from staticfiles %}
 {% block title %}| edit {{ form.instance.title }} {% endblock %}
 {%  block content %}
+{{ positions_formset.form.errors }}
 <form action='' method="POST">
   {% csrf_token %}
   <div class="circle--actions--bar">
@@ -34,7 +35,6 @@
                     {% endfor %}
                 </datalist>
                   {{ form.description }}
-                  {{ form.skills }}
                   {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
               </li>
             {% endfor %}

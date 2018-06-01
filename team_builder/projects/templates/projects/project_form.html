@@ -2,6 +2,7 @@
 {% load static from staticfiles %}
 {% block title %}{{ form.title}} {% endblock %}
 {%  block content %}
+{{ position_formset.form.errors }}
 
 
 <form method="POST" action=''>
@@ -28,6 +29,7 @@
                 <ul id='positions' class='circle--group--list circle--clone--list'>
                     {% for form in positions_formset.forms %} 
                     <li {% if not form.instance.pk %}class='dynamic' {% endif %}>
+                        {{form.id}}
                         {{ form.title.error }}
                         {{ form.title }}
                         <datalist id="options">
@@ -37,7 +39,6 @@
                         </datalist>
                         {{ form.description.error }}
                         {{ form.description }}
-                        {{ form.skills }}
                         {% if form.instance.pk %}{{ a_form.DELETE }}{% endif %}
                     </li>
                   {% endfor %}

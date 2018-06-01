@@ -2,6 +2,8 @@
 {% load static from staticfiles %}
 {% block title %}{{ block.super }}|{{ user.full_name }}- profile{% endblock %}
 {% block content %}
+{{ SkillsFormset.form.errors }}
+{{CompletedProjectsFormset.form.errors}}
   <form id="profile-form" action="" enctype="multipart/form-data" method="post">{% csrf_token %}
       <div class="bounds circle--page">
         <div class="circle--page--header circle--fluid">

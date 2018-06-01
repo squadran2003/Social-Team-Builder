@@ -26,6 +26,7 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
     
     def get_context_data(self, **kwargs):
         data = super(CreateProjectView, self).get_context_data(**kwargs)
+        skills = Skill.objects.all()
         if self.request.POST:
             data['positions_formset'] = PositionFormset(self.request.POST)
         else:
@@ -92,12 +93,10 @@ class ProjectUpdateView(UpdateView):
             data['positions_formset'] = PositionFormset(self.request.POST)
         else:
             if queryset:
-                data['positions_formset'] = PositionFormset(
-                                                    queryset=queryset)
+                data['positions_formset'] = PositionFormset(queryset=queryset)
             else:
                 # if there are no position send a extra form
-                data['positions_formset'] = PositionFormset(
-                                                    queryset=queryset)
+                data['positions_formset'] = PositionFormset(queryset=queryset)
                 data['positions_formset'].extra = 1
         return data
     
@@ -105,8 +104,8 @@ class ProjectUpdateView(UpdateView):
         data = self.get_context_data()
         instance = form.save(commit=False)
         instance.user = self.request.user
-        instance.save()
         positions_formset = data['positions_formset']
+        instance.save()
         # get all positions
         if positions_formset.is_valid():
             positions = positions_formset.save(commit=False)
