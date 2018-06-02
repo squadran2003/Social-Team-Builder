@@ -26,7 +26,6 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
     
     def get_context_data(self, **kwargs):
         data = super(CreateProjectView, self).get_context_data(**kwargs)
-        skills = Skill.objects.all()
         if self.request.POST:
             data['positions_formset'] = PositionFormset(self.request.POST)
         else:
@@ -106,7 +105,7 @@ class ProjectUpdateView(UpdateView):
         instance.user = self.request.user
         positions_formset = data['positions_formset']
         instance.save()
-        # get all positions
+        # get all positionss
         if positions_formset.is_valid():
             positions = positions_formset.save(commit=False)
             for obj in positions_formset.deleted_objects:
@@ -114,11 +113,14 @@ class ProjectUpdateView(UpdateView):
             for position in positions:
                 try:
                     exis_pos = Position.objects.get(title=position.title)
+                    exis_pos.title = position.title
+                    exis_pos.description = position.description
                 except Position.DoesNotExist:
                     position.save()
                     position.projects.add(instance)
                     position.save()
                 else:
+                    exis_pos.save()
                     exis_pos.projects.add(instance)
                     exis_pos.save()
             positions_formset.save_m2m()

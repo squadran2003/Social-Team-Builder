@@ -35,6 +35,9 @@
                     {% endfor %}
                 </datalist>
                   {{ form.description }}
+                  Pick from a list of skills required
+                  <br>
+                  {{ form.skills }}
                   {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
               </li>
             {% endfor %}

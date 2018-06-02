@@ -53,8 +53,8 @@
       <div class="circle--secondary--module">
         <h3>Project Needs</h3>
         <ul class="circle--link--list">
-            {% for position in project.position_set.all %}
-                 <li><a>{{ position.skill.name }}</a></li>
+            {% for skill in project.position.skills_set.all %}
+                  <li><a>{{ skill }}</a></li>
             {% endfor %}
         </ul>
       </div>

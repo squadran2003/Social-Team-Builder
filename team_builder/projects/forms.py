@@ -9,7 +9,7 @@ class PositionForm(ModelForm):
 
     class Meta:
         model = Position
-        fields = ('title', 'description')
+        fields = ('title', 'description','skills')
 
     def __init__(self, *args, **kwargs):
         super(PositionForm, self).__init__(*args, **kwargs)
