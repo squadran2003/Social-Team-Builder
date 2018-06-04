@@ -4,10 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
+
 
 
 from .models import Project, Position
-from skills.models import Skill
 from .forms import PositionFormset
 
 
@@ -27,11 +28,14 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         data = super(CreateProjectView, self).get_context_data(**kwargs)
         if self.request.POST:
-            data['positions_formset'] = PositionFormset(self.request.POST)
+            data['positions_formset'] = PositionFormset(
+                                                    self.request.POST
+                                                    )
         else:
             data['positions'] = Position.objects.all()
             data['positions_formset'] = PositionFormset(
-                                        queryset=Position.objects.none())
+                                            queryset=Position.objects.none()
+                                        )
             data['positions_formset'].extra = 1
         return data
     
@@ -40,14 +44,16 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         instance = form.save(commit=False)
         instance.user = self.request.user
         positions_formset = data['positions_formset']
+        instance.save()
         if positions_formset.is_valid():
-            instance.save()
             positions = positions_formset.save(commit=False)
             for obj in positions_formset.deleted_objects:
                 obj.projects.remove(instance)
             for position in positions:
                 try:
-                    exis_pos = Position.objects.get(title=position.title)
+                    exis_pos = Position.objects.get(
+                                title=position.title
+                    )
                 except Position.DoesNotExist:
                     position.save()
                     position.projects.add(instance)
@@ -112,15 +118,14 @@ class ProjectUpdateView(UpdateView):
                 obj.projects.remove(instance)
             for position in positions:
                 try:
-                    exis_pos = Position.objects.get(title=position.title)
-                    exis_pos.title = position.title
-                    exis_pos.description = position.description
+                    exis_pos = Position.objects.get(
+                                title=position.title
+                    )
                 except Position.DoesNotExist:
                     position.save()
                     position.projects.add(instance)
                     position.save()
                 else:
-                    exis_pos.save()
                     exis_pos.projects.add(instance)
                     exis_pos.save()
             positions_formset.save_m2m()
@@ -168,15 +173,19 @@ class PositionSearchView(ListView):
 
     def get_queryset(self):
         search_val = self.request.GET.get('search')
-        return Project.objects.filter(title__icontains=search_val)
+        return Project.objects.filter(
+                        Q(title__icontains=search_val) |
+                        Q(position__title__icontains=search_val)
+                ).distinct()
 
     def get_context_data(self, **kwargs):
         data = super(PositionSearchView, self).get_context_data(**kwargs)
         data['projects'] = self.get_queryset()
         search_val = self.request.GET.get('search')
         data['positions'] = Position.objects.filter(
-                                    projects__title__icontains=search_val
-                                    )
+                            Q(projects__title__icontains=search_val) |
+                            Q(title__icontains=search_val)
+                        ).distinct()
         data['search_val'] = search_val
         return data
 

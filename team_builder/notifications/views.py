@@ -101,7 +101,7 @@ def delete(request, slug=None):
     _id = slug2id(slug)
 
     notification = get_object_or_404(
-        Notification, recipient=request.user, id=_id)
+        Notification, recipient=request.user, id=int(slug))
 
     if getattr(settings, 'NOTIFICATIONS_SOFT_DELETE', False):
         notification.deleted = True

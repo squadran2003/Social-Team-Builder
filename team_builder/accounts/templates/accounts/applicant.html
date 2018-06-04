@@ -6,14 +6,6 @@
 
 
 {% block content %}
-<div class="circle--actions--bar">
-    <nav class="bounds">
-        <ul class="circle--pill--list">
-          <li><a href="{% url 'applications:list' %}">Applications</a></li>
-          <li><a class="selected" href="{% url 'accounts:profile' option=None %}">Profile</a></li>
-        </ul>
-      </nav>
-  </div>
 
   <div class="bounds circle--page">
     <div class="circle--page--header circle--fluid">
@@ -21,7 +13,6 @@
         <h2>Profile</h2>
       </div>
       <div class="circle--fluid--cell circle--fluid--secondary">
-          <a class="button icon-on-left" href="{% url 'accounts:edit_profile' %}">Edit</a>
       </div>
     </div>
 
@@ -40,30 +31,30 @@
       </div>
 
       <h2>Past Projects</h2>
-          {% if accepted_applications %}
-           <table class="u-full-width circle--table">
-              <thead>
-                <tr>
-                  <th>Project Title</th>
-                  <th class="circle--cell--right">Project Needs</th>
-                </tr>
-              </thead>
-            <tbody>
-            {%  for application in accepted_applications %}
-              <tr class="clickable-row" data-href="{% url 'projects:detail' pk=application.project.id %}">
-                  <td>
-                    <h3>{{application.project.title}}</h3>
-                  </td>
-                  <td class="circle--cell--right">
-                    <span class="secondary-label">{{application.position}}</span>
-                  </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-          {% else %}
-          <p>No past projects yet!</p>
-          {% endif %}
+      {% if accepted_applications %}
+      <table class="u-full-width circle--table">
+         <thead>
+           <tr>
+             <th>Project Title</th>
+             <th class="circle--cell--right">Project Needs</th>
+           </tr>
+         </thead>
+       <tbody>
+       {%  for application in accepted_applications %}
+         <tr class="clickable-row" data-href="{% url 'projects:detail' pk=application.project.id %}">
+             <td>
+               <h3>{{application.project.title}}</h3>
+             </td>
+             <td class="circle--cell--right">
+               <span class="secondary-label">{{application.project.positions_set.all|join:", "}}</span>
+             </td>
+           </tr>
+       {% endfor %}
+       </tbody>
+     </table>
+     {% else %}
+     <p>No past projects yet!</p>
+     {% endif %}
     </div>
 
     <div class="grid-25 grid-push-5">

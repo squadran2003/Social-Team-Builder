@@ -12,6 +12,7 @@ from projects.forms import UserCompletedProjectFormset
 from skills.forms import SkillFormset
 from .models import User
 from skills.models import Skill
+from applications.models import Application
 from projects.models import UserCompletedProject
 
 
@@ -45,6 +46,10 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                                             self.request.POST,
                                             prefix='skills')
         else:
+            data['accepted_applications'] = Application.objects.filter(
+                                        employee=self.get_object(),
+                                        accepted=True
+                                    )
             data['CompletedProjectsFormset'] = UserCompletedProjectFormset(
                     prefix='completed_projects',
                     queryset=UserCompletedProject.objects.filter(
@@ -52,14 +57,14 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                                             )
             data['SkillsFormset'] = SkillFormset(
                     prefix='skills',
-                    queryset=Skill.objects.filter(user=self.get_object())
+                    queryset=Skill.objects.filter(users=self.get_object())
                 )
             # check if there are any completed projects for the user
             projects = UserCompletedProject.objects.filter(
                                              user=self.get_object()
                                             )
             # check if the user has added skills
-            skills = Skill.objects.filter(user=self.get_object())
+            skills = Skill.objects.filter(users=self.get_object())
             if not projects:
                 # if there are no projects send a extra form through
                 data['CompletedProjectsFormset'].extra = 1
@@ -93,10 +98,14 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                 project.user = instance
                 project.save()
             for skill in skills:
-                skill.user = instance
-                skill.save()
+                skill_instance, created = Skill.objects.get_or_create(
+                                            name=skill.name
+                                        )
+                skill_instance.save()
+                skill_instance.users.add(instance)
+                skill_instance.save()
             instance.save()
-            skills_formset.save()
+            skills_formset.save_m2m()
             completed_projects.save()
         return super().form_valid(form)
 
@@ -104,7 +113,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class ApplicantView(LoginRequiredMixin, DetailView):     
     model = User
     context_object = 'user'
-    template_name = 'accounts/profile.html'
+    template_name = 'accounts/applicant.html'
     
 
 class loginView(FormView):

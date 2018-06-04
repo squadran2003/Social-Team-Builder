@@ -68,7 +68,6 @@ class ListApplicationView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = Application.objects.filter(employer=self.request.user)
-        print(queryset)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -89,8 +88,27 @@ class EditApplicationView(LoginRequiredMixin, UpdateView):
     
     def form_valid(self, form):
         instance = form.save(commit=False)
-        print(instance.accepted)
-        print(instance.rejected)
+        message = ""
+        if form.instance.accepted and form.instance.rejected:
+            messages.error(self.request, 
+                           "You cannot accept and reject a application")
+            return HttpResponseRedirect(reverse_lazy('applications:edit',
+                                        kwargs={'pk':
+                                                self.kwargs.get('pk')
+                                                }
+                            ))
+        if form.instance.accepted:
+            message = """ You have been accepted 
+                        for position of {}""".format(instance.position)
+            notify.send(instance.employer, 
+                        recipient=instance.employee, 
+                        verb=(message))
+        if form.instance.rejected:
+            message = """ You have been rejected 
+                        for position of {}""".format(instance.position)
+            notify.send(instance.employer, 
+                        recipient=instance.employee, 
+                        verb=(message))
         return super().form_valid(form)
 
 
