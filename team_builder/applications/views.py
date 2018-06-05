@@ -2,12 +2,9 @@ from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views.generic import CreateView, ListView, UpdateView
-
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from notifications.signals import notify
-
 from .models import Application
 from projects.models import Project, Position
 # Create your views here.
@@ -73,6 +70,8 @@ class ListApplicationView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['projects'] = Project.objects.filter(user=self.request.user)
+        data['positions'] = Position.objects.all()
+        data['filter_type'] = None
         return data
 
 
@@ -110,6 +109,55 @@ class EditApplicationView(LoginRequiredMixin, UpdateView):
                         recipient=instance.employee, 
                         verb=(message))
         return super().form_valid(form)
+
+
+class ApplicationFilterView(ListView):
+    model = Application
+    fields = ()
+    template_name = 'applications/applications.html'
+
+    def get_queryset(self, *args, **kwargs):
+        search_term = self.kwargs.get('filter')
+        # if a search term comes in and its a position
+        # then filter by that position
+        if Position.objects.filter(title=search_term).exists():
+            queryset = Application.objects.filter(
+                                                  employer=self.request.user,
+                                                  position__title=search_term
+                                                )
+            
+        elif search_term and search_term == 'new':
+            queryset = Application.objects.filter(
+                                                   employer=self.request.user,
+                                                   accepted=False,
+                                                   rejected=False
+                                                )
+        elif search_term and search_term == 'accepted':
+            queryset = Application.objects.filter(
+                                                   employer=self.request.user,
+                                                   accepted=True
+                                                )
+        elif search_term and search_term == 'rejected':
+            queryset = Application.objects.filter(
+                                                   employer=self.request.user,
+                                                   rejected=True
+                                                )
+        else:
+            queryset = Application.objects.filter(employer=self.request.user)
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['projects'] = Project.objects.filter(user=self.request.user)
+        data['positions'] = Position.objects.all()
+        data['filter_type'] = self.kwargs.get('filter')
+        return data
+
+
+
+
+
+    
 
 
 

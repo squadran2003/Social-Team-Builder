@@ -97,6 +97,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             for project in projects:
                 project.user = instance
                 project.save()
+            for obj in skills_formset.deleted_objects:
+                obj.users.remove(instance)
             for skill in skills:
                 skill_instance, created = Skill.objects.get_or_create(
                                             name=skill.name

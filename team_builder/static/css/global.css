@@ -2113,5 +2113,8 @@ input[type="email"].circle--input--h6, input[type="number"].circle--input--h6, i
 .glyphicon{
   font-size: 1.2em;
 }
+.circle--fluid--cell a,  .button, .button-text{
+  text-decoration: none;
+}
 
 

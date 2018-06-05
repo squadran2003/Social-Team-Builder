@@ -1,4 +1,3 @@
-
 {% extends "layout.html" %}
 {% load static from staticfiles %}
 
@@ -23,10 +22,10 @@
       <div class="circle--filter circle--secondary--module">
         <h4>Status</h4>
         <ul class="circle--filter--list">
-          <li><a class="selected">All Applications</a></li>
-          <li><a>New Applications</a></li>
-          <li><a>Accepted</a></li>
-          <li><a>Rejected</a></li>
+          <li><a {% if filter_type == None or filter_type == "all" %}class="selected"{% endif %} href="{% url 'applications:filter' filter='all' %}">All Applications</a></li>
+          <li><a {% if filter_type == "new" %}class="selected"{%endif %} href="{% url 'applications:filter' filter='new' %}">New Applications</a></li>
+          <li><a {% if filter_type == "accepted" %}class="selected" {%endif %} href="{% url 'applications:filter' filter='accepted' %}">Accepted</a></li>
+          <li><a {% if filter_type == "rejected" %}class="selected" {%endif %} href="{% url 'applications:filter' filter='rejected' %}">Rejected</a></li>
         </ul>
       </div>
 
@@ -35,7 +34,7 @@
         <ul class="circle--filter--list">
           {% if projects %}
             {% for project in projects %}
-              <li><a class="selected">{{ project.title }}</a></li>
+              <li><a href="{% url 'projects:detail' pk=project.pk %}" class="selected">{{ project.title }}</a></li>
             {% endfor %}
           {% else %}
            <li>You have not created projects created</li>
@@ -47,15 +46,10 @@
       <div class="circle--filter circle--secondary--module">
         <h4>Project Needs</h4>
         <ul class="circle--filter--list">
-          <li><a class="selected">All Needs</a></li>
-          <li><a>Android Developer</a></li>
-          <li><a>Designer</a></li>
-          <li><a>Java Developer</a></li>
-          <li><a>PHP Developer</a></li>
-          <li><a>Python Developer</a></li>
-          <li><a>Rails Developer</a></li>
-          <li><a>WordPress Developer</a></li>
-          <li><a>iOS Developer</a></li>
+          <li><a {% if filter_type == None or filter_type == "all" %}class="selected"{% endif %} href="{% url 'applications:filter' filter='all' %}">All Needs</a></li>
+          {% for position in positions %}
+          <li><a {% if filter_type ==  position.title %}class="selected"{% endif %} href="{% url 'applications:filter' filter=position.title %}">{{ position.title }}</a></li>
+          {% endfor %}
         </ul>
       </div>
 

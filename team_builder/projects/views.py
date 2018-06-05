@@ -121,6 +121,9 @@ class ProjectUpdateView(UpdateView):
                     exis_pos = Position.objects.get(
                                 title=position.title
                     )
+                    exis_pos.title = position.title
+                    exis_pos.description = position.description
+                    exis_pos.skill = position.skill
                 except Position.DoesNotExist:
                     position.save()
                     position.projects.add(instance)
