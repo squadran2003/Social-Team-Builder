@@ -70,7 +70,9 @@ class ListApplicationView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['projects'] = Project.objects.filter(user=self.request.user)
-        data['positions'] = Position.objects.all()
+        data['positions'] = Position.objects.filter(
+                                        projects__user=self.request.user
+                                    )
         data['filter_type'] = None
         return data
 
@@ -149,7 +151,9 @@ class ApplicationFilterView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['projects'] = Project.objects.filter(user=self.request.user)
-        data['positions'] = Position.objects.all()
+        data['positions'] = Position.objects.filter(
+                                        projects__user=self.request.user
+                                    )
         data['filter_type'] = self.kwargs.get('filter')
         return data
 
