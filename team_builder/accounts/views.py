@@ -21,7 +21,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('accounts:profile',
                                kwargs={'option': None}
                                )
-    form_class = forms.PeofileCreateForm
+    form_class = forms.ProfileCreateForm
     context_object = 'user'
  
     def get_object(self):

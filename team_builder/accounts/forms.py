@@ -15,7 +15,7 @@ class UserCreateForm(UserCreationForm):
         self.fields['password2'].help_text = ''
 
 
-class PeofileCreateForm(ModelForm):
+class ProfileCreateForm(ModelForm):
     
     class Meta:
         model = User
