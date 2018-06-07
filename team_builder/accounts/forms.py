@@ -10,7 +10,7 @@ import os
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['display_name','email']
+        fields = ['display_name', 'email']
     
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
@@ -23,17 +23,4 @@ class PeofileCreateForm(ModelForm):
     class Meta:
         model = User
         fields = ['full_name', 'bio', 'image']
-
-
-
-
-
-
-		
-
-
-
-
-	
-
 
