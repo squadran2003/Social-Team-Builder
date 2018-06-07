@@ -2,9 +2,6 @@ from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
-import datetime
-import re
-import os
 
 
 class UserCreateForm(UserCreationForm):
