@@ -21,7 +21,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('accounts:profile',
                                kwargs={'option': None}
                                )
-    form_class = forms.UserCreateForm
+    form_class = forms.PeofileCreateForm
     context_object = 'user'
  
     def get_object(self):
@@ -130,10 +130,9 @@ class loginView(FormView):
     
 
 class SignupView(CreateView):
-    model = User
-    fields = ['display_name','email','password']
     template_name = 'accounts/signup.html'
     success_url = reverse_lazy('accounts:login')
+    form_class = forms.UserCreateForm
 
     def form_valid(self, form):
         user = form.save(commit=False)

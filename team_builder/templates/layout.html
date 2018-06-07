@@ -35,19 +35,6 @@
 
 </head>
 <body>
-{% if messages %}
-    {% for message in messages %}
-      {% if message.tags == 'error' %}
-        <div class="alert alert-danger">
-          {{ message}}
-        </div>
-      {% else %}
-        <div class="alert alert-success">
-          {{ message}}
-        </div>
-      {% endif %}
-    {% endfor %}
-  {% endif %}
   <header class="circle--header">
     <div class="bounds">
       <div class="circle--fluid">
@@ -84,11 +71,24 @@
               {% endif %}
             </ul>
           </nav>
+          
         </div>
       </div>
     </div>
   </header>
-
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'error' %}
+      <div class="alert alert-danger">
+        {{ message}}
+      </div>
+    {% else %}
+      <div class="alert alert-success">
+        {{ message}}
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
   {% block content %}
 
   {% endblock %}
